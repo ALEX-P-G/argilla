@@ -51,7 +51,7 @@ class Banner extends FActiveRecord
     return $this->banners[$location];
   }
 
-  public function findByPage($location = null,$page = null)
+  public function findByPage($location = null, $page = null)
   {
     $criteria = new CDbCriteria();
 
@@ -62,31 +62,33 @@ class Banner extends FActiveRecord
 
     $page = parse_url($page ? $page : Yii::app()->request->requestUri);
 
-    foreach($banners as $banner)
+    foreach( $banners as $banner )
     {
       if( !$banner->pagelist )
         continue;
 
       $exclusionPage = null;
 
-      if(!empty($banner->pagelist_exc))
+      if( !empty($banner->pagelist_exc) )
       {
-        foreach(explode("\n", $banner->pagelist_exc) as $searchPageExc)
+        foreach( explode("\n", $banner->pagelist_exc) as $searchPageExc )
         {
           $searchPageExc = str_replace('*', '.+', trim($searchPageExc));
-          if($exclusionPage = preg_match('#^'.$searchPageExc.'$#', $page['path'])){
+          if( $exclusionPage = preg_match('#^'.$searchPageExc.'$#', $page['path']) )
+          {
             break;
           }
         }
       }
 
-      if(!$exclusionPage)
+      if( !$exclusionPage )
       {
-        foreach(explode("\n", $banner->pagelist) as $searchPage)
+        foreach( explode("\n", $banner->pagelist) as $searchPage )
         {
           $searchPage = str_replace('*', '.+', trim($searchPage));
 
-          if(preg_match('#^'.$searchPage.'$#', $page['path'])){
+          if( preg_match('#^'.$searchPage.'$#', $page['path']) )
+          {
             return $banner;
           }
         }
